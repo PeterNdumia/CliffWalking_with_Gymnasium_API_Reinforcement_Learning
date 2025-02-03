@@ -1,3 +1,8 @@
+""" 
+Implementation of the cliff world with the gymnasium environment with DQN algorithm
+
+"""
+
 import numpy as np
 import time
 import os

@@ -19,7 +19,7 @@ class GridWorldEnv(gym.Env):
         self.xsize, self.ysize = size  # The size of the square grid
         self.window_xsize = 3*512  # The size of the PyGame window width
         self.window_ysize = 512  # The size of the PyGame window height
-        self.cliff = slice(1, self.xsize - 1)
+        self.cliff = slice(1, self.xsize - 1) # Defining the cliff
 
         # Observations are dictionaries with the agent's and the target's location.
         # Each location is encoded as an element of {0, ..., `size`}^2,
@@ -72,11 +72,13 @@ class GridWorldEnv(gym.Env):
 
     def reset(self, seed=None, options=None):
 
+        # reset position for the agent
         self._agent_location =np.array([0,self.ysize-1])
+
+        # reset position for the target
         self._target_location = np.array([self.xsize-1,self.ysize-1])
         
         
-
         observation = self._get_obs()
         info = self._get_info()
 
@@ -93,16 +95,21 @@ class GridWorldEnv(gym.Env):
             self._agent_location + direction, a_min=np.array([0,0]), a_max=np.array([self.xsize-1,self.ysize-1])
         )
 
+        # An episode is done if the agent falls off the cliff
         fell_off_cliff = (self._agent_location[0] in range(self.cliff.start, self.cliff.stop) and self._agent_location[1] == self.ysize - 1)
+        
         # An episode is done if the agent has reached the target
         terminated = np.array_equal(self._agent_location, self._target_location)
+
+        # A reward of -100  if the agent falls off the cliff otherwise -1 for all other moves
         reward = -100 if fell_off_cliff else -1  
         observation = self._get_obs()
         info = self._get_info()
 
         if self.render_mode == "human":
             self._render_frame()
-
+        
+        # return observation, info, reward, terminated, fell_off_cliff
         return observation, reward, terminated, fell_off_cliff, info
 
     def render(self):
@@ -140,6 +147,8 @@ class GridWorldEnv(gym.Env):
             (self._agent_location + 0.5) * pix_square_size,
             pix_square_size / 3,
         )
+
+        # Drawing the cliff and painting it black
         for col in range(self.cliff.start, self.cliff.stop):
             pygame.draw.rect(
                 canvas,

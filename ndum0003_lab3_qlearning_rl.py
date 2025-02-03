@@ -10,7 +10,6 @@ env = gymnasium.make("gymnasium_env/GridWorld-v0", render_mode="human")
 observation, info = env.reset()
 
 # QTable : contains the Q-Values for every (state,action) pair
-
 numstates=(env.observation_space['agent'].high[0]+1) * (env.observation_space['agent'].high[1]+1)
 numactions = env.action_space.n
 qtable = np.random.rand(numstates, numactions).tolist()
@@ -27,19 +26,31 @@ decay = 0.1
 #learning rate
 alpha =1
 
-
+# empty array to store rewards per episode
 rewards_per_episode = []
+
+# empty array to store steps per episode
 steps_per_episode = []
 
 for i in range(episodes):
+    # unpack the state dictionary and info from the environment reset
     state_dict, info = env.reset()
+
+    # Get state from state dictionary
     state = (state_dict['agent'][0]+1) * (state_dict['agent'][1]+1) - 1
+
     steps = 0
+
     # total reward initialized to 0
     total_reward = 0
+
+    # initialize terminated
     terminated = False
+
+    #initialize falling off cliff
     fell_off_cliff = False
 
+    # continue episode unless reaching target or falling off cliff
     while not terminated and not fell_off_cliff:
         os.system('clear')
         print("episode #", i+1, "/", episodes)
@@ -48,6 +59,8 @@ for i in range(episodes):
 
         # count steps to finish game
         steps += 1
+
+        # add steps to array for plotting
         steps_per_episode.append(steps)
 
         # act randomly sometimes to allow exploration
@@ -55,12 +68,12 @@ for i in range(episodes):
             action = env.action_space.sample()
         # if not select max action in Qtable (act greedy)
         else:
+        # else act greedy
             action = qtable[state].index(max(qtable[state]))
 
         
-        
-        # take action
         next_state_dict, reward, terminated, fell_off_cliff, info = env.step(action)
+        # get next state from next_state dictionary
         next_state = (next_state_dict['agent'][0]+1)* (next_state_dict['agent'][1]+1) - 1
 
         # update qtable value with Bellman equation
@@ -82,6 +95,7 @@ for i in range(episodes):
     print("Total reward :", total_reward)
     time.sleep(0.8)
 
+# Plotting the rewards and steps per episode
 fig, axes  = plt.subplots(2,1, figsize=(10, 8))
 axes[0].plot(range(1, len(rewards_per_episode) + 1), rewards_per_episode, label="Total Reward per Episode", color="blue")
 axes[0].set_xlabel("Episode")

@@ -1,3 +1,9 @@
+
+""" 
+Implementation of the cliff world with the gymnasium environment with PPO algorithm
+
+"""
+
 import gymnasium
 import gymnasium_env
 from stable_baselines3 import PPO
