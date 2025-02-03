@@ -60,8 +60,6 @@ for i in range(episodes):
         # count steps to finish game
         steps += 1
 
-        # add steps to array for plotting
-        steps_per_episode.append(steps)
 
         # act randomly sometimes to allow exploration
         if np.random.uniform() < epsilon:
@@ -85,6 +83,10 @@ for i in range(episodes):
 
         #total reward
         total_reward += reward
+    
+    # add steps to array for plotting
+    steps_per_episode.append(steps)
+    # add rewards to array for plotting
     rewards_per_episode.append(total_reward)
 
     # The more we learn, the less we take random actions
