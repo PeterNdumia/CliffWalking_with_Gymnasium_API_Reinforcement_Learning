@@ -38,8 +38,9 @@ for i in range(episodes):
     # total reward initialized to 0
     total_reward = 0
     terminated = False
+    fell_off_cliff = False
 
-    while not terminated:
+    while not terminated and not fell_off_cliff:
         os.system('clear')
         print("episode #", i+1, "/", episodes)
         env.render()
@@ -71,7 +72,7 @@ for i in range(episodes):
 
         #total reward
         total_reward += reward
-        rewards_per_episode.append(total_reward)
+    rewards_per_episode.append(total_reward)
 
     # The more we learn, the less we take random actions
     epsilon -= decay*epsilon
@@ -81,15 +82,15 @@ for i in range(episodes):
     print("Total reward :", total_reward)
     time.sleep(0.8)
 
-fig, axes  = plt.subplots(2,1, figsize=(10, 6))
-axes[0].plot(range(1, len(rewards_per_episode) + 1), rewards_per_episode, label="Total Reward per Episode", color="blue", marker="o")
+fig, axes  = plt.subplots(2,1, figsize=(10, 8))
+axes[0].plot(range(1, len(rewards_per_episode) + 1), rewards_per_episode, label="Total Reward per Episode", color="blue")
 axes[0].set_xlabel("Episode")
 axes[0].set_ylabel("Total Reward")
 axes[0].set_title("Total Reward per Episode Over Time")
 axes[0].legend()
 axes[0].grid(True)
 
-axes[1].plot(range(1, len(steps_per_episode) + 1), steps_per_episode, label="Total steps per Episode", color="blue", marker="o")
+axes[1].plot(range(1, len(steps_per_episode) + 1), steps_per_episode, label="Total steps per Episode", color="blue")
 axes[1].set_xlabel("Episode")
 axes[1].set_ylabel("Total Steps")
 axes[1].set_title("Total Steps per Episode Over Time")
