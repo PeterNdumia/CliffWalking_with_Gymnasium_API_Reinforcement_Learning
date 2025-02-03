@@ -7,9 +7,9 @@ from stable_baselines3 import DQN
 env = gymnasium.make("gymnasium_env/GridWorld-v0", render_mode="human")
 model = DQN("MultiInputPolicy", env, verbose=1)
 model.learn(total_timesteps=10000, log_interval=4)
-model.save("dqn_blocks")
+model.save("dqn_gridworld")
 del model 
-model = DQN.load("dqn_blocks")
+model = DQN.load("dqn_gridworld")
 observation, info = env.reset()
 while True:
     action, _states = model.predict(observation, deterministic=True)
