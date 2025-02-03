@@ -90,7 +90,7 @@ axes[0].legend()
 axes[0].grid(True)
 
 axes[1].figure(figsize=(10, 6))
-axes[1].plot(range(1, len(steps_per_episode) + 1), steps_per_episode label="Total steps per Episode", color="blue", marker="o")
+axes[1].plot(range(1, len(steps_per_episode) + 1), steps_per_episode, label="Total steps per Episode", color="blue", marker="o")
 axes[1].set_xlabel("Episode")
 axes[1].set_ylabel("Total Steps")
 axes[1].set_title("Total Steps per Episode Over Time")
