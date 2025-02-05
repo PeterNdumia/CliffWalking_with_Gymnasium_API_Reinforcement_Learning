@@ -37,7 +37,8 @@ for i in range(episodes):
     state_dict, info = env.reset()
 
     # Get state from state dictionary
-    state = (state_dict['agent'][0]+1) * (state_dict['agent'][1]+1) - 1
+    #state = (state_dict['agent'][0]+1) * (state_dict['agent'][1]+1) - 1
+    state = state_dict['agent'][1] * (env.observation_space['agent'].high[0]+1) + state_dict['agent'][0]
 
     steps = 0
 
@@ -72,7 +73,8 @@ for i in range(episodes):
         
         next_state_dict, reward, terminated, fell_off_cliff, info = env.step(action)
         # get next state from next_state dictionary
-        next_state = (next_state_dict['agent'][0]+1)* (next_state_dict['agent'][1]+1) - 1
+        #next_state = (next_state_dict['agent'][0]+1)* (next_state_dict['agent'][1]+1) - 1
+        next_state = next_state_dict['agent'][1] * (env.observation_space['agent'].high[0]+1) + next_state_dict['agent'][0]
 
         # update qtable value with Bellman equation
         qtable[state][action] =  qtable[state][action] + alpha*(reward + gamma * max(qtable[next_state])-qtable[state][action])
